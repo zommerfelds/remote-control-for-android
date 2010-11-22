@@ -31,22 +31,28 @@ public class MainActivity extends Activity {
 	 /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	// here begins the life of our app
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.main); // set the layout from the XML file
         
-	    ipText = (EditText) findViewById(R.id.EditTextIp);
+	    ipText = (EditText) findViewById(R.id.EditTextIp); // get IP text field
 	    
-	    Button confirmButton = (Button) findViewById(R.id.ButtonConnect);
+	    Button confirmButton = (Button) findViewById(R.id.ButtonConnect); // get "connect" button
+	    
+	    // setup button listener
 	    confirmButton.setOnClickListener(new View.OnClickListener() {
 	        public void onClick(View view) {
+	        	String ipAddress = ipText.getText().toString();
+	            
+	        	// start activity to connect to server
 	        	Intent myIntent = new Intent();
 	        	myIntent.setClassName("ch.aero.RemoteControl", "ch.aero.RemoteControl.ControllerActivity");
-	        	myIntent.putExtra("ch.aero.RemoteControl.Ip", ipText.getText().toString()); // key/value pair, where key needs current package prefix.
+	        	myIntent.putExtra("ch.aero.RemoteControl.Ip", ipAddress);
 	        	startActivity(myIntent);
 	        }
 	    });
     
     }
     
-    private EditText ipText;
+    private EditText ipText; // we need to store this for the button listener
 }

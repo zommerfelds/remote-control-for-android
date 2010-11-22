@@ -23,52 +23,36 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
-import java.io.*;
-import java.net.*;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
 public class ControllerActivity extends Activity {
-	 /** Called when the activity is first created. */
+	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // get the IP address from the main activity's intent
         String ip = super.getIntent().getExtras().getString("ch.aero.RemoteControl.Ip");
         
-        try {
-            echoSocket = new Socket(ip, 57891);
-            bufIn = new BufferedReader(new InputStreamReader(
-                    echoSocket.getInputStream()));
-        } catch (UnknownHostException e) {
-            System.err.println(e.getMessage());
-            System.exit(1);
-        } catch (IOException e) {
-            System.err.println("Couldn't get I/O for the connection.");
-            System.exit(1);
-        }
+        // setup a new connection
+        connection = new Connection();
+        boolean success = connection.open(ip);
         
-        List<String> strList = new LinkedList<String>();
-        
-        while (true) {
-        	String butName = "";
-			try {
-				butName = bufIn.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.exit(1);
-			}
-			if (butName.equals(""))
-				break;
-			strList.add(butName);
+        // if failed, show error and exit
+        if (!success) {
+        	Toast.makeText(this, connection.getErrMsg(), Toast.LENGTH_SHORT).show();
+        	
+        	finish();
+        	return;
         }
 
+        // create buttons layout with data from server
         LinearLayout linLayout = new LinearLayout(this);        
         linLayout.setOrientation(LinearLayout.VERTICAL);
         
-        Iterator<String> it = strList.iterator();
+        Iterator<String> it = connection.getButLabels().iterator();
         byte i = 0;
         while (it.hasNext()) {
         	String label = it.next();
@@ -77,20 +61,18 @@ public class ControllerActivity extends Activity {
             button.setText(label);
             linLayout.addView(button);
             
+            // class to listen for button clicks
             class ButtonClickListener implements View.OnClickListener {
             	ButtonClickListener(byte butNum) {
             		this.butNum = butNum;
             	}
 
     	        public void onClick(View view) {
-    	        	try {
-    					echoSocket.getOutputStream().write(butNum);
-    					echoSocket.getOutputStream().flush();
-    				} catch (IOException e) {
-    					// TODO Auto-generated catch block
-    					e.printStackTrace();
-    					System.exit(1);
-    				}
+    	        	// send event to server
+    	        	boolean success = connection.sendButClick(butNum);
+    	        	if (!success) {
+    	        		finish();
+    	        	}
     	        }
             	
             	private byte butNum;
@@ -98,24 +80,19 @@ public class ControllerActivity extends Activity {
             
             button.setOnClickListener(new ButtonClickListener(i) {
     	    });
+            
+            if (i==255)
+            	break;
             i++;
         }
-        setContentView(linLayout);
+        setContentView(linLayout); // set the layout
     }
     
     @Override
     public void onDestroy() {
     	super.onDestroy();
-		try {
-	    	bufIn.close();
-			echoSocket.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.exit(1);
-		}
+    	connection.close(); // close the connection
     }
     
-    private Socket echoSocket;
-    private BufferedReader bufIn;
+    private Connection connection;
 }

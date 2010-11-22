@@ -16,6 +16,7 @@
 # along with RemoteControl for Android.
 # If not, see <http://www.gnu.org/licenses/>.import RemoteControlServer as rcs
 
+import RemoteControlServer as rcs
 import subprocess
 
 def play():
@@ -27,14 +28,20 @@ def next():
 def previous():
     subprocess.call(['rhythmbox-client','--previous'])
 def show():
-    subprocess.call(['rhythmbox-client','--notify'])    
+    subprocess.call(['rhythmbox-client','--notify'])
+def volup():
+    subprocess.call(['rhythmbox-client','--volume-up'])
+def voldown():
+    subprocess.call(['rhythmbox-client','--volume-down'])
 
 butDef = rcs.ButtonDefinition()
 butDef.addButton("Play",play)
 butDef.addButton("Pause",pause)
 butDef.addButton("Next",next)
 butDef.addButton("Previous",previous)
-butDef.addButton("Show track",show)
+butDef.addButton("Volume Up",volup)
+butDef.addButton("Volume Down",voldown)
+butDef.addButton("Show track on PC",show)
 
 server = rcs.Server(butDef)
 server.run()

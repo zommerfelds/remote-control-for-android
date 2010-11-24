@@ -8,8 +8,7 @@ System requirements:
  * Any system where Python and Python sockets are supported
  * Python is installed (any newer version should work)
  * An Android phoneport 57891
- * Phone has connection over IP to the server (port 57891)
-<br/>
+ * Phone has connection over IP to the server (port 57891)<br/>
 
 == Download Remote Control for Android ==
 
@@ -22,7 +21,7 @@ First, download the remote-control-for-android source. At the moment there is no
 {{{
 svn checkout http://remote-control-for-android.googlecode.com/svn/trunk/ RemoteControlForAndroid
 }}}
-<br/>
+
 
 == Install client on the phone ==
 
@@ -35,7 +34,7 @@ The easiest way to do this is:
  * For browsing the SD card, install an app from the Android Market like "ES File Explorer" or "ASTRO"
 
  * Open the installed file browser app and search for the .apk file. Click it and install
-<br/>
+
 
 == Setup the server ==
 
@@ -68,7 +67,7 @@ server.run()
 All this code does is start the server and tell it to run sayHello when the person on the phone presses "Hello".
 
 Now run the server with the command *`python myserver.py`*
-<br/>
+
 
 == Connect your phone to the server ==
 
@@ -80,8 +79,7 @@ Now run the server with the command *`python myserver.py`*
 
  * Enter the IP address of the server.
 
- * If everything goes well, you should see now a screen with one button labeled "Hello".
-
+ * If everything goes well, you should see now a screen with one button labeled "Hello"
 <br/>
 That should be everything you need to setup the hello world server.
 

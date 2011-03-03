@@ -16,6 +16,8 @@
 # along with RemoteControl for Android.
 # If not, see <http://www.gnu.org/licenses/>.import RemoteControlServer as rcs
 
+# Controls the Rhytmbox player
+
 import RemoteControlServer as rcs
 import subprocess
 

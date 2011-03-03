@@ -58,6 +58,8 @@ def run_pygame():
         pygame.display.flip()
         time.sleep(0.1)
         
+    pygame.display.quit()
+        
 def run_server():
     butDef = rcs.ButtonDefinition()
     butDef.addButton("Red",red)
@@ -70,9 +72,9 @@ def run_server():
     server = rcs.Server(butDef)
     server.run()
 
-winthread = threading.Thread(target=run_pygame)
-winthread.setDaemon(True)
-winthread.start()
+thread = threading.Thread(target=run_server)
+thread.setDaemon(True)
+thread.start()
 
-run_server()
+run_pygame()
 

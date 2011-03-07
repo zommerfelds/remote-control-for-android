@@ -16,14 +16,16 @@
 # along with RemoteControl for Android.
 # If not, see <http://www.gnu.org/licenses/>.import RemoteControlServer as rcs
 
-def f1():
-    print 'running f1'
-def f2():
-    print 'running f2'
+import RemoteControlServer as rcs
+
+def onButton1Press():
+    print 'User pressed button 1 - Hello'
+def onButton2Press():
+    print 'User pressed button 2 - World'
 
 butDef = rcs.ButtonDefinition()
-butDef.addButton("MyButton1",f1)
-butDef.addButton("MyButton2",f2)
+butDef.addButton("Hello", onButton1Press)
+butDef.addButton("World", onButton2Press)
 
 server = rcs.Server(butDef)
 server.run()

@@ -25,13 +25,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import java.util.Iterator;
-
 public class ControllerActivity extends Activity {
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        setContentView(R.layout.controller); // set the layout from the XML file
 
         // get the IP address from the main activity's intent
         String ip = super.getIntent().getExtras().getString("ch.aero.RemoteControl.Ip");
@@ -44,18 +44,19 @@ public class ControllerActivity extends Activity {
         if (!success) {
         	Toast.makeText(this, connection.getErrMsg(), Toast.LENGTH_SHORT).show();
         	
+        	setResult(RESULT_CONNECTION_ERROR);
+        	
         	finish();
         	return;
         }
+        
+        setResult(RESULT_OK);
 
         // create buttons layout with data from server
-        LinearLayout linLayout = new LinearLayout(this);        
-        linLayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout linLayout = (LinearLayout) findViewById(R.id.linLayout);
         
-        Iterator<String> it = connection.getButLabels().iterator();
         byte i = 0;
-        while (it.hasNext()) {
-        	String label = it.next();
+        for (String label : connection.getButLabels()) {
             
             Button button = new Button(this);
             button.setText(label);
@@ -71,6 +72,7 @@ public class ControllerActivity extends Activity {
     	        	// send event to server
     	        	boolean success = connection.sendButClick(butNum);
     	        	if (!success) {
+    	        		Toast.makeText(getApplicationContext(), connection.getErrMsg(), Toast.LENGTH_SHORT).show();
     	        		finish();
     	        	}
     	        }
@@ -78,14 +80,12 @@ public class ControllerActivity extends Activity {
             	private byte butNum;
             };
             
-            button.setOnClickListener(new ButtonClickListener(i) {
-    	    });
+            button.setOnClickListener(new ButtonClickListener(i));
             
             if (i==255)
             	break;
             i++;
         }
-        setContentView(linLayout); // set the layout
     }
     
     @Override
@@ -95,4 +95,7 @@ public class ControllerActivity extends Activity {
     }
     
     private Connection connection;
+
+    public final static int CONNECT_REQUEST = 0;
+    public final static int RESULT_CONNECTION_ERROR = 100;
 }

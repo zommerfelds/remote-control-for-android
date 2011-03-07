@@ -3,6 +3,7 @@ package ch.aero.RemoteControl;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
@@ -22,9 +23,10 @@ public class Connection {
         	    throw new UnknownHostException( "Invalid IP address format! Must be: [0-255].[0-255].[0-255].[0-255]" );
         	}
         	
-            echoSocket = new Socket(ipAddress, PORT);         // open socket
+            socket = new Socket();
+            socket.connect(new InetSocketAddress(ipAddress, PORT), 2000); // open socket
             bufIn = new BufferedReader(new InputStreamReader( // for buffered input
-                    echoSocket.getInputStream()));
+                    socket.getInputStream()));
         } catch (UnknownHostException e) { // couldn't reach server
         	errMsg = e.getMessage();
         	return false;
@@ -58,7 +60,7 @@ public class Connection {
 			return; // only close if it's open
 		try {
 	    	bufIn.close();
-			echoSocket.close();
+			socket.close();
 		} catch (IOException e) {
 			errMsg = e.getMessage();
 		}
@@ -77,8 +79,8 @@ public class Connection {
 		}
 		
 		try {
-			echoSocket.getOutputStream().write(butNum); // send the but number
-			echoSocket.getOutputStream().flush();
+			socket.getOutputStream().write(butNum); // send the but number
+			socket.getOutputStream().flush();
 		} catch (IOException e) {
 			errMsg = e.getMessage();
 			return false;
@@ -93,7 +95,7 @@ public class Connection {
 	private final int PORT = 57891;
 	
 	private boolean isConnected;
-    private Socket echoSocket;
+    private Socket socket;
     private BufferedReader bufIn;
     private String errMsg;
     

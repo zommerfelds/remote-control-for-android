@@ -7,7 +7,7 @@ You need to have basic knowledge on Python and know how to execute commands on y
 System requirements:
  * Any system where Python and Python sockets are supported
  * Python is installed (any newer version should work)
- * An Android phoneport 57891
+ * An Android phone
  * Phone has connection over IP to the server (port 57891)<br/>
 
 == Download Remote Control for Android ==

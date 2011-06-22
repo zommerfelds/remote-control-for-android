@@ -54,7 +54,7 @@ def sayHello():
 
 # create the button definition
 # this is what will be displayed on the phone when it connects to the server
-butDef = RCS.ButtonDefinition()
+butDef = RCS.ButtonsDefinition()
 butDef.addButton("Hello", sayHello)
 
 # create server object

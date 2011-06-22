@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 # Copyright 2010 Christian Zommerfelds
 # 
 # This file is part of RemoteControl for Android.
@@ -18,14 +20,14 @@
 
 import RemoteControlServer as rcs
 
-def onButton1Press():
-    print 'User pressed button 1 - Hello'
-def onButton2Press():
-    print 'User pressed button 2 - World'
+def onButtonHelloPress():
+    print '- This is what happens when you press "Hello" -'
+def onButtonWorldPress():
+    print '- And this is what is printed when you press "World" -'
 
-butDef = rcs.ButtonDefinition()
-butDef.addButton("Hello", onButton1Press)
-butDef.addButton("World", onButton2Press)
+butDef = rcs.ButtonsDefinition()
+butDef.addButton("Hello", onButtonHelloPress)
+butDef.addButton("World", onButtonWorldPress)
 
-server = rcs.Server(butDef)
+server = rcs.Server(butDef, verbose=True)
 server.run()

@@ -48,20 +48,22 @@ def yellow():
 
 def run_pygame():
     screen = pygame.display.set_mode((640, 400))
-    running = 1
+    pygame.event.set_allowed(None)
+    pygame.event.set_allowed(pygame.QUIT)
+    running = True
 
     while running:
-        event = pygame.event.poll()
-        if event.type == pygame.QUIT:
-            running = 0
+        time.sleep(0.1)
+        
+        if pygame.event.peek():
+            running = False
         screen.fill(color)
         pygame.display.flip()
-        time.sleep(0.1)
         
     pygame.display.quit()
         
 def run_server():
-    butDef = rcs.ButtonDefinition()
+    butDef = rcs.ButtonsDefinition()
     butDef.addButton("Red",red)
     butDef.addButton("Green",green)
     butDef.addButton("Blue",blue)
@@ -73,8 +75,9 @@ def run_server():
     server.run()
 
 thread = threading.Thread(target=run_server)
-thread.setDaemon(True)
+thread.setDaemon(True) # so that server thread stops when the main thread stops
 thread.start()
 
 run_pygame()
 
+print "quit"

@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 # coding: utf-8
 
 # Copyright 2010 Christian Zommerfelds
@@ -52,7 +53,7 @@ def mutate():
     s = random.choice(['X','T','?','!','.','&','=','-',':','@',
                        '%','+','^','*','~','$','#','§','0','8'])
 
-butDef = rcs.ButtonDefinition()
+butDef = rcs.ButtonsDefinition()
 butDef.addButton("Left",left)
 butDef.addButton("Right",right)
 butDef.addButton("Mutate",mutate)

@@ -18,6 +18,8 @@
 
 package ch.aero.RemoteControl;
 
+import java.io.IOException;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,76 +28,86 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class ControllerActivity extends Activity {
+
+	private Connection connection;
+
+	public final static int CONNECT_REQUEST = 0;
+	public final static int RESULT_CONNECTION_ERROR = 100;
+
 	/** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        
-        setContentView(R.layout.controller); // set the layout from the XML file
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        // get the IP address from the main activity's intent
-        String ip = super.getIntent().getExtras().getString("ch.aero.RemoteControl.Ip");
-        
-        // setup a new connection
-        connection = new Connection();
-        boolean success = connection.open(ip);
-        
-        // if failed, show error and exit
-        if (!success) {
-        	Toast.makeText(this, connection.getErrMsg(), Toast.LENGTH_SHORT).show();
-        	
-        	setResult(RESULT_CONNECTION_ERROR);
-        	
-        	finish();
-        	return;
-        }
-        
-        setResult(RESULT_OK);
+		setContentView(R.layout.controller); // set the layout from the XML file
 
-        // create buttons layout with data from server
-        LinearLayout linLayout = (LinearLayout) findViewById(R.id.linLayout);
-        
-        byte i = 0;
-        for (String label : connection.getButLabels()) {
-            
-            Button button = new Button(this);
-            button.setText(label);
-            linLayout.addView(button);
-            
-            // class to listen for button clicks
-            class ButtonClickListener implements View.OnClickListener {
-            	ButtonClickListener(byte butNum) {
-            		this.butNum = butNum;
-            	}
+		// get the IP address from the main activity's intent
+		String ip = super.getIntent().getExtras().getString(
+				MainActivity.EXTRA_NAME_IP);
 
-    	        public void onClick(View view) {
-    	        	// send event to server
-    	        	boolean success = connection.sendButClick(butNum);
-    	        	if (!success) {
-    	        		Toast.makeText(getApplicationContext(), connection.getErrMsg(), Toast.LENGTH_SHORT).show();
-    	        		finish();
-    	        	}
-    	        }
-            	
-            	private byte butNum;
-            };
-            
-            button.setOnClickListener(new ButtonClickListener(i));
-            
-            if (i==255)
-            	break;
-            i++;
-        }
-    }
-    
-    @Override
-    public void onDestroy() {
-    	super.onDestroy();
-    	connection.close(); // close the connection
-    }
-    
-    private Connection connection;
+		// setup a new connection
+		connection = new Connection();
+		try {
+			connection.open(ip);
+		} catch (IOException e) {
+			// if failed, show error and exit
+			Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
 
-    public final static int CONNECT_REQUEST = 0;
-    public final static int RESULT_CONNECTION_ERROR = 100;
+			setResult(RESULT_CONNECTION_ERROR);
+
+			finish();
+			return;
+		}
+
+		setResult(RESULT_OK);
+
+		// create buttons layout with data from server
+		LinearLayout linLayout = (LinearLayout) findViewById(R.id.linLayout);
+
+		byte i = 0;
+		for (String label : connection.getButLabels()) {
+
+			Button button = new Button(this);
+			button.setText(label);
+			linLayout.addView(button);
+
+			// class to listen for button clicks
+			class ButtonClickListener implements View.OnClickListener {
+				ButtonClickListener(byte butNum) {
+					this.butNum = butNum;
+				}
+
+				public void onClick(View view) {
+					// send event to server
+					try {
+						connection.sendButClick(butNum);
+					} catch (IOException e) {
+						Toast.makeText(getApplicationContext(), e.getMessage(),
+								Toast.LENGTH_SHORT).show();
+						finish();
+					}
+				}
+
+				private byte butNum;
+			}
+			;
+
+			button.setOnClickListener(new ButtonClickListener(i));
+
+			if (i == 255)
+				break;
+			i++;
+		}
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		try {
+			connection.close(); // close the connection
+		} catch (IOException e) {
+			Toast.makeText(getApplicationContext(), e.getMessage(),
+					Toast.LENGTH_SHORT).show();
+		}
+	}
 }

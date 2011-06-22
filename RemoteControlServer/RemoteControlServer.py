@@ -18,57 +18,77 @@
 
 import socket
 
-class ButtonDefinition:
+class ButtonsDefinition(object):
     def __init__(self):
         self.__buttons = {}
         self.__curIndex = 0
         
-    def addButton(self, name, func):
-        if name == '':
-            print 'Error, name = ""'
+    def addButton(self, label, func):
+        if label == '':
+            print 'ERROR: addButton(...) name must not be empty'
             return
-        self.__buttons[self.__curIndex] = (name, func)
+        self.__buttons[self.__curIndex] = (label, func)
         self.__curIndex += 1
         
     def runFunc(self, num):
         if num in self.__buttons:
             self.__buttons[num][1]()
             
-    def getName(self, num):
+    def getLabel(self, num):
         if num in self.__buttons:
             return self.__buttons[num][0]
         return ''
 
-class Server:
-    def __init__(self, butDef):
-        self.__butDef = butDef
+class Server(object):
+    def __init__(self, butDef, verbose=False):
+        self._butDef = butDef
+        self._verbose = verbose
         
     def run(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        s.bind(('', self.__PORT))
+        s.bind(('', self._PORT))
         s.listen(1)
         while True:
-            #print 'Waiting for connection, port:', self.__PORT
+            self._write('Waiting for connection, port:', self._PORT)
             conn, addr = s.accept()
-            #print 'Connected with', addr
-            #print 'Sending button labels'
+            self._write('Connecting with', addr)
             
+            data = conn.recv(len(self._HANDSHAKE_IN))
+            if not self._HANDSHAKE_IN == data:
+            	self._write('Refusing connection: wrong handshake')
+            	conn.close()
+            	continue
+            	
+            conn.sendall(self._HANDSHAKE_OUT)
+            
+            self._write('Sending button labels')
             i = 0
             while True:
-                name = self.__butDef.getName(i)
+                name = self._butDef.getLabel(i)
                 if name == '':
                     break
                 conn.sendall(name+'\n')
                 i += 1
             conn.sendall('\n')
-            while 1:
-                data = conn.recv(self.__PACKET_SIZE)
+            
+            while True:
+                data = conn.recv(self._PACKET_SIZE)
                 if not data: break
-                but = self.__butDef.getName(ord(data))
-                #print 'Received '+str(ord(data))+':"'+str(but)+'"'
-                self.__butDef.runFunc(ord(data))
+                butnum = ord(data)
+                but = self._butDef.getLabel(butnum)
+                self._write('Received button press '+str(butnum)+': "'+str(but)+'"')
+                self._butDef.runFunc(ord(data))
             conn.close()
+            
+    def _write(self, *objs):
+        if (self._verbose):
+            print 'RemoteControlServer>',
+            for obj in objs:
+                print obj,
+            print
         
-    __PORT = 57891
-    __PACKET_SIZE = 1
+    _PORT = 57891
+    _PACKET_SIZE = 1
+    _HANDSHAKE_OUT = "remote-control handshake server\n"
+    _HANDSHAKE_IN = "remote-control handshake client\n"

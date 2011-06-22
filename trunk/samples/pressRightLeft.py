@@ -18,6 +18,7 @@
 # along with RemoteControl for Android.
 # If not, see <http://www.gnu.org/licenses/>.
 
+
 # Simulates pressing the right or left arrow keys
 # Can be used for controlling a presentation or slide show
 # needs pyatspi
@@ -31,7 +32,7 @@ def pressKey(keycode):
    pyatspi.Registry.generateKeyboardEvent(keycode, None,
                                           pyatspi.KEY_PRESSRELEASE)
 
-butDef = rcs.ButtonDefinition()
+butDef = rcs.ButtonsDefinition()
 butDef.addButton("Left",functools.partial(pressKey,113))
 butDef.addButton("Right",functools.partial(pressKey,114))
 

@@ -1,9 +1,9 @@
 RemoteControl for Android
 -------------------------
-Copyright 2010 Christian Zommerfelds
+Copyright 2011 Christian Zommerfelds
 
 
-Remote Control is a very small library written in Python that allows the user to easily create a simple system where you can trigger actions in a server from your android phone via TCP/IP.
+Remote Control is a very small App and a library that allows the user to easily create a simple system where you can trigger actions in a server from your android phone via TCP/IP.
 
 This project consists of two parts:
  * The Android Remote Control server library (Python)

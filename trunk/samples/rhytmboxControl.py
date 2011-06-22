@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 # Copyright 2010 Christian Zommerfelds
 # 
 # This file is part of RemoteControl for Android.
@@ -14,7 +16,7 @@
 # 
 # You should have received a copy of the GNU General Public License
 # along with RemoteControl for Android.
-# If not, see <http://www.gnu.org/licenses/>.import RemoteControlServer as rcs
+# If not, see <http://www.gnu.org/licenses/>.
 
 # Controls the Rhytmbox player
 
@@ -36,7 +38,7 @@ def volup():
 def voldown():
     subprocess.call(['rhythmbox-client','--volume-down'])
 
-butDef = rcs.ButtonDefinition()
+butDef = rcs.ButtonsDefinition()
 butDef.addButton("Play",play)
 butDef.addButton("Pause",pause)
 butDef.addButton("Next",next)

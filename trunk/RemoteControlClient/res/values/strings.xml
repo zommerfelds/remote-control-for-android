@@ -4,4 +4,5 @@
     <string name="app_name">Remote Control</string>
 <string name="enterip">Enter IP address</string>
 <string name="connect">Connect</string>
+<string name="select_ip">or click an IP address below</string>
 </resources>

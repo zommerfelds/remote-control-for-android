@@ -21,9 +21,9 @@
 import RemoteControlServer as rcs
 
 def onButtonHelloPress():
-    print '- This is what happens when you press "Hello" -'
+    print('- This is what happens when you press "Hello" -')
 def onButtonWorldPress():
-    print '- And this is what is printed when you press "World" -'
+    print('- And this is what is printed when you press "World" -')
 
 butDef = rcs.ButtonsDefinition()
 butDef.addButton("Hello", onButtonHelloPress)

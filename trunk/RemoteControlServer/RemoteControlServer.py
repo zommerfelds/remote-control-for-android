@@ -25,7 +25,7 @@ class ButtonsDefinition(object):
         
     def addButton(self, label, func):
         if label == '':
-            print 'ERROR: addButton(...) name must not be empty'
+            print('ERROR: addButton(...) name must not be empty')
             return
         self.__buttons[self.__curIndex] = (label, func)
         self.__curIndex += 1
@@ -68,9 +68,9 @@ class Server(object):
                 name = self._butDef.getLabel(i)
                 if name == '':
                     break
-                conn.sendall(name+'\n')
+                conn.sendall((name+'\n').encode('UTF-8'))
                 i += 1
-            conn.sendall('\n')
+            conn.sendall(b'\n')
             
             while True:
                 data = conn.recv(self._PACKET_SIZE)
@@ -83,12 +83,12 @@ class Server(object):
             
     def _write(self, *objs):
         if (self._verbose):
-            print 'RemoteControlServer>',
+            print('RemoteControlServer> ',end='')
             for obj in objs:
-                print obj,
-            print
+                print(obj,sep='',end='')
+            print()
         
     _PORT = 57891
     _PACKET_SIZE = 1
-    _HANDSHAKE_OUT = "remote-control handshake server\n"
-    _HANDSHAKE_IN = "remote-control handshake client\n"
+    _HANDSHAKE_OUT = b"remote-control handshake server\n"
+    _HANDSHAKE_IN = b"remote-control handshake client\n"

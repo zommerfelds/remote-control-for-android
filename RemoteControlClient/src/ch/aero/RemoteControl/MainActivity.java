@@ -63,8 +63,7 @@ public class MainActivity extends Activity {
 	private static final int DIALOG_ABOUT_ID = 0;
 
 	public static final String EXTRA_NAME_IP = MainActivity.class.getPackage()
-			.getName()
-			+ ".Ip";
+			.getName() + ".Ip";
 
 	/**
 	 * Main: Called when the activity is first created. Here begins the life of
@@ -86,48 +85,33 @@ public class MainActivity extends Activity {
 				android.R.layout.simple_list_item_1, ipList);
 		updateHelpLabelVisibility();
 
-		ListView listView = (ListView) findViewById(R.id.ipListView); // find
-																		// the
-																		// IP
-																		// list
-																		// widget
+		ListView listView = (ListView) findViewById(R.id.ipListView); // get the IP list widget
 		listView.setAdapter(ipArraydapter); // add the adapter to it
 
 		// create a button click handler for the list widget
 		listView.setOnItemClickListener(new OnItemClickListener() {
-			/*
-			 * (non-Javadoc) When clicked, connect to the corresponding IP
-			 */
+			// When clicked, connect to the corresponding IP
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				connect(((TextView) view).getText().toString()); // connect to
-																	// the
-																	// clicked
-																	// ip
+				connect(((TextView) view).getText().toString()); // connect to the clicked IP
 			}
 		});
 		registerForContextMenu(listView); // register for long clicks
 
-		Button confirmButton = (Button) findViewById(R.id.ButtonConnect); // get
-																			// the
-																			// "connect"
-																			// button
+		Button confirmButton = (Button) findViewById(R.id.ButtonConnect); // get the "connect" button
 
 		// setup button listener
 		confirmButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				String ipAddress = ipTextInput.getText().toString(); // read IP
-																		// from
-																		// text
-																		// field
+				String ipAddress = ipTextInput.getText().toString(); // read IP from text field
 				connect(ipAddress); // and try to connect
 			}
 		});
 	}
 
 	/*
-	 * (non-Javadoc) Create a new context menu
+	 * Create a new context menu
 	 * 
 	 * @see android.app.Activity#onCreateContextMenu(android.view.ContextMenu,
 	 * android.view.View, android.view.ContextMenu.ContextMenuInfo)
@@ -141,7 +125,7 @@ public class MainActivity extends Activity {
 	}
 
 	/*
-	 * (non-Javadoc) Called when a selection is made in a context menu
+	 * Called when a selection is made in a context menu
 	 * 
 	 * @see android.app.Activity#onContextItemSelected(android.view.MenuItem)
 	 */
@@ -160,7 +144,7 @@ public class MainActivity extends Activity {
 	}
 
 	/*
-	 * (non-Javadoc) This is called the first time the menu button is pressed.
+	 * This is called the first time the menu button is pressed.
 	 * 
 	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
 	 */
@@ -172,7 +156,7 @@ public class MainActivity extends Activity {
 	}
 
 	/*
-	 * (non-Javadoc) The user selected a menu item.
+	 * The user selected a menu item.
 	 * 
 	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
 	 */
@@ -327,7 +311,7 @@ public class MainActivity extends Activity {
 	}
 
 	/*
-	 * (non-Javadoc) This will get called when we get a result from the
+	 * This will get called when we get a result from the
 	 * ControllerActivity
 	 * 
 	 * @see android.app.Activity#onActivityResult(int, int,
@@ -346,7 +330,7 @@ public class MainActivity extends Activity {
 	}
 
 	/*
-	 * (non-Javadoc) Setup dialogs
+	 * Setup dialogs
 	 * 
 	 * @see android.app.Activity#onCreateDialog(int)
 	 */
@@ -357,17 +341,19 @@ public class MainActivity extends Activity {
 		case DIALOG_ABOUT_ID:
 			String version;
 			try {
-				version = getPackageManager().getPackageInfo(getPackageName(),
-						0).versionName;
+				version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
 			} catch (NameNotFoundException e) {
 				version = "#error getting version#";
 			}
-			dialog = new AlertDialog.Builder(this).setTitle("About").setIcon(
-					android.R.drawable.ic_dialog_info).setMessage(
-					"RemoteControl for Android\n" + "Version: " + version
-							+ "\n" + "Author: Christian Zommerfelds\n"
-							+ "This program is licensed under the GNU GPL3")
-					.setNeutralButton("OK", null).create();
+			dialog = new AlertDialog.Builder(this)
+							.setTitle("About")
+							.setIcon(android.R.drawable.ic_dialog_info)
+							.setMessage("RemoteControl for Android\n" + "Version: " + version + "\n"
+							          + "Author: Christian Zommerfelds\n"
+							          + "E-Mail: christian.zommerfelds@gmail.com\n"
+							          + "This program is licensed under the GNU GPL3")
+							.setNeutralButton("OK", null)
+							.create();
 			break;
 		default:
 			dialog = null;

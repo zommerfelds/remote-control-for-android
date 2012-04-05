@@ -1,10 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/LinearLayout01" xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:layout_height="match_parent" android:layout_width="wrap_content">
-    <ImageView android:layout_height="wrap_content" android:src="@drawable/icon" android:layout_width="match_parent" android:id="@+id/imageView" android:padding="5px"></ImageView>
-    <LinearLayout android:id="@+id/linearLayout1" android:orientation="horizontal" android:layout_height="wrap_content" android:layout_width="match_parent" android:gravity="center_horizontal">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout01"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/logo_description"
+        android:padding="5dp"
+        android:src="@drawable/icon" >
+
+</ImageView>
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+
         <EditText android:layout_height="wrap_content" android:hint="@string/enterip" android:id="@+id/EditTextIp" android:maxLines="1" android:layout_width="wrap_content" android:inputType="date"></EditText>
         <Button android:layout_height="wrap_content" android:id="@+id/ButtonConnect" android:text="@string/connect" android:onClick="onConnect" android:layout_width="wrap_content"></Button>
     </LinearLayout>
-    <TextView android:layout_height="wrap_content" android:paddingTop="10px" android:text="@string/select_ip" android:gravity="center_horizontal" android:layout_width="match_parent" android:id="@+id/clickText"></TextView>
-<ListView android:id="@+id/ipListView" android:layout_height="wrap_content" android:layout_width="match_parent"></ListView>
+
+    <TextView
+        android:id="@+id/clickText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingTop="10dp"
+        android:text="@string/select_ip" >
+</TextView>
+
+<ListView
+    android:id="@+id/ipListView"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+</ListView>
 </LinearLayout>

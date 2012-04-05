@@ -80,4 +80,4 @@ thread.start()
 
 run_pygame()
 
-print "quit"
+print("quit")

@@ -5,8 +5,7 @@ This small tutorial explains how to setup a basic remote control system and how 
 You need to have basic knowledge on Python and know how to execute commands on your operating system
 
 System requirements:
- * Any system where Python and Python sockets are supported
- * Python is installed (any newer version should work)
+ * A computer where Python 3 is installed
  * An Android phone
  * Phone has connection over IP to the server (port 57891)<br/>
 
@@ -25,8 +24,7 @@ svn checkout http://remote-control-for-android.googlecode.com/svn/trunk/ RemoteC
 
 == Install client on the phone ==
 
-Next step is to install the client app on your Android phone.
-The easiest way to do this is:
+Next step is to install the client app on your Android phone. First you will have to get the .apk file. You can build the APK file using Eclipse.
  * Connect your phone with the USB cable (or any other connection type where you can access the SD card)
 
  * Copy the file *{{{RemoteControlClient/bin/RemoteControlClient.apk}}}* over to the SD card

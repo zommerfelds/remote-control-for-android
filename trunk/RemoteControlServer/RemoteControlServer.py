@@ -45,41 +45,46 @@ class Server(object):
         self._verbose = verbose
         
     def run(self):
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        s.bind(('', self._PORT))
-        s.listen(1)
-        while True:
-            self._write('Waiting for connection, port:', self._PORT)
-            conn, addr = s.accept()
-            self._write('Connecting with', addr)
-            
-            data = conn.recv(len(self._HANDSHAKE_IN))
-            if not self._HANDSHAKE_IN == data:
-            	self._write('Refusing connection: wrong handshake')
-            	conn.close()
-            	continue
-            	
-            conn.sendall(self._HANDSHAKE_OUT)
-            
-            self._write('Sending button labels')
-            i = 0
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            s.bind(('', self._PORT))
+            s.listen(1)
             while True:
-                name = self._butDef.getLabel(i)
-                if name == '':
-                    break
-                conn.sendall((name+'\n').encode('UTF-8'))
-                i += 1
-            conn.sendall(b'\n')
-            
-            while True:
-                data = conn.recv(self._PACKET_SIZE)
-                if not data: break
-                butnum = ord(data)
-                but = self._butDef.getLabel(butnum)
-                self._write('Received button press '+str(butnum)+': "'+str(but)+'"')
-                self._butDef.runFunc(ord(data))
-            conn.close()
+                self._write('Waiting for connection, port:', self._PORT)
+                conn, addr = s.accept()
+                self._write('Connecting with', addr)
+                
+                data = conn.recv(len(self._HANDSHAKE_IN))
+                if not self._HANDSHAKE_IN == data:
+                  self._write('Refusing connection: wrong handshake')
+                  conn.close()
+                  continue
+                  
+                conn.sendall(self._HANDSHAKE_OUT)
+                
+                self._write('Sending button labels')
+                i = 0
+                while True:
+                    name = self._butDef.getLabel(i)
+                    if name == '':
+                        break
+                    conn.sendall((name+'\n').encode('UTF-8'))
+                    i += 1
+                conn.sendall(b'\n')
+                
+                while True:
+                    data = conn.recv(self._PACKET_SIZE)
+                    if not data: break
+                    butnum = ord(data)
+                    but = self._butDef.getLabel(butnum)
+                    self._write('Received button press '+str(butnum)+': "'+str(but)+'"')
+                    self._butDef.runFunc(ord(data))
+                conn.close()
+        except KeyboardInterrupt:
+            # TODO: close all sockets
+            self._write('Server stopped')
+
             
     def _write(self, *objs):
         if (self._verbose):

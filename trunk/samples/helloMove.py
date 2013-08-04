@@ -24,17 +24,17 @@ import sys
 import random
 
 RANGE = 80
-p = RANGE/2
+p = RANGE//2
 s = 'X'
 
 random.seed()
 
 def draw():
     sys.stdout.write('|')
-    for i in xrange(p):
+    for i in range(p):
         sys.stdout.write(' ')
     sys.stdout.write(s)
-    for i in xrange(RANGE-p):
+    for i in range(RANGE-p):
         sys.stdout.write(' ')
     sys.stdout.write('|\n')
     sys.stdout.flush()
@@ -52,6 +52,7 @@ def mutate():
     global s
     s = random.choice(['X','T','?','!','.','&','=','-',':','@',
                        '%','+','^','*','~','$','#','§','0','8'])
+    draw()
 
 butDef = rcs.ButtonsDefinition()
 butDef.addButton("Left",left)
